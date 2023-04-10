@@ -1,0 +1,29 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Ticket {
+  id: String!
+  ticketNumber: Float!
+  title: String!
+  issue: String!
+  category: String!
+  orderDetail: String!
+  isClosed: Boolean!
+  createdAt: DateTime!
+  modifiedAt: DateTime!
+  imageProductUrl: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  tickets(limit: Float! = 0, page: Float! = 0): [Ticket!]!
+  ticket(id: String!): Ticket!
+  filterByCategory(categoryName: String!): [Ticket!]!
+  filterByTitle(titleParam: String!): [Ticket!]!
+  closedTickets: [Ticket!]!
+}
