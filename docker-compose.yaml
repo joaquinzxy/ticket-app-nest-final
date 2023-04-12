@@ -18,6 +18,5 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     container_name: ticketDB
-    users: "503"
     volumes:
       - /data
