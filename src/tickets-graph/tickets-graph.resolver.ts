@@ -42,7 +42,7 @@ export class TicketsGraphResolver {
     return this.ticketsGraphService.filterByStatus(ValidStatus.closed);
   }
 
-  @Query(() => [Ticket], { name: 'closedTickets' })
+  @Query(() => [Ticket], { name: 'openTickets' })
   async openTickets() {
     return this.ticketsGraphService.filterByStatus(ValidStatus.closed);
   }

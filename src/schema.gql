@@ -26,4 +26,5 @@ type Query {
   filterByCategory(categoryName: String!): [Ticket!]!
   filterByTitle(titleParam: String!): [Ticket!]!
   closedTickets: [Ticket!]!
+  openTickets: [Ticket!]!
 }

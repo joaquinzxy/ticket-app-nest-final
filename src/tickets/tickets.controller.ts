@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, Query, BadRequestException } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TicketsService } from './tickets.service';
@@ -24,7 +24,11 @@ export class TicketsController {
     @UploadedFiles() files: { imageFile: Express.Multer.File[], csvFile: Express.Multer.File[] },
     @GetUser() user: User
   ) {
+    if (!files || !files.csvFile || !files.imageFile) {
+      throw new BadRequestException('Missing files: csvFile or imageFile')
+    }
     const { csvFile, imageFile } = files;
+
     return this.ticketsService.create(createTicketDto, user, csvFile[0], imageFile[0]);
   }
 

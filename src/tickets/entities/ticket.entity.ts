@@ -1,6 +1,5 @@
 import { Field, ObjectType } from "@nestjs/graphql"
 import { User } from "src/auth/entities/user.entity"
-import { validCSV } from "src/file-managment/dto/csv-file.dto"
 import { Column, CreateDateColumn, Entity, Generated, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 
 @Entity({ name: 'tickets' })

@@ -11,6 +11,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { FileManagmentModule } from './file-managment/file-managment.module';
 import { ConfigService } from 'aws-sdk';
 import { SeedModule } from './seed/seed.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -40,6 +41,6 @@ import { SeedModule } from './seed/seed.module';
     SeedModule
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule { }

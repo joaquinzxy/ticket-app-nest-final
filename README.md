@@ -19,6 +19,10 @@
 
 Amazing API focused on manage users authentication and creation, modification, update and delete of support tickets.
 
+Our Ticket API uses NestJS, Postgres (RDS AWS) and S3 Buckets to take advantage of Cloud Services like Amazon Web Services.
+
+---
+
 # Features
 
 This API is composed by 4 main modules which are:
@@ -48,28 +52,81 @@ This API is composed by 4 main modules which are:
     - Open/closed tickets
     - Category
 
-# Get started
+---
 
-# Live version (Digital Ocean)
+- 🗂️ **File-Management (S3)**
+  - Using S3 Bucket to save images and then save the **S3 file url** in the database.
 
-# Development Environment (Local)
+---
+# Deployment
+
+There are two ways to deploy the app:
+
+- ## AWS (using terraform and a T2.Large EC2)
+
+    ### Steps:
+    1. Clone this repo
+    ```
+    git clone https://github.com/joaquinzxy/ticket-app-nest-final.git
+    ```
+    2. Install AWS CLI 
+    ```
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+    sudo installer -pkg AWSCLIV2.pkg -target /
+    ```
+    3. Use:  `aws configure` to set your credentials or you can place it on  `~/.aws/configure`
+    4. Install Terraform CLI: [Documentation]('https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+    5. Being in `./terraform` folder, execute:
+    ```
+    terraform init
+    terraform plan
+    terraform apply
+    ```
+    6. It will take a 1-2 minutes to be fully-deployed 
+    7.  You will see the in the output the public IP where you can access to the API EC2
+
+- ## Local (using Docker Compose)
+
+    ### Steps:
+    1. Clone this repo
+    ```
+    git clone https://github.com/joaquinzxy/ticket-app-nest-final.git
+    ```
+    2. Install AWS CLI 
+    ```
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+    sudo installer -pkg AWSCLIV2.pkg -target /
+    ```
+    3. Use:  `aws configure` to set your credentials or you can place it on  `~/.aws/configure`
+    4. Run `docker-compose up -d` to instance the API and DB
+    5. Finally the API ENDPOINT will be `http://localhost:3000`
+
+---
 
 # Examples of usage
 
-## **Authentication**
+## REST API (CRUD)
+
+### Check ```http://localhost:3000/api/docs``` or ```http://{ec2-publicip}:3000/api/docs``` to see Swagger Documentation
+
+### **Authentication**
 
 - **[POST]** ➡ `/auth/register`
 - **[POST]** ➡ `/auth/login`
+
+`Needs to be authenticated`
+
 - **[POST]** ➡ `/auth/disable`
 - **[POST]** ➡ `/auth/enable`
 - **[GET]** ➡ `/auth/check-status`
 
-## **Tickets**
+### **Tickets**
 
 `Needs to be authenticated`
 
 - **[POST]** ➡ `/tickets`
 - **[GET]** ➡ `/tickets`
+- **[GET]** ➡ `/tickets?page={page}&limit={limit}`
 - **[GET]** ➡ `/tickets/category/{category}`
 - **[GET]** ➡ `/tickets/status/closed`
 - **[GET]** ➡ `/tickets/status/open`
@@ -77,3 +134,118 @@ This API is composed by 4 main modules which are:
 - **[GET]** ➡ `/tickets/filter/{title}`
 - **[PATCH]** ➡ `/tickets/{id}`
 - **[DELETE]** ➡ `/tickets/{id}`
+
+---
+
+## GRAPHQL (only Queries)
+
+### Check ```http://localhost:3000/graphql``` or ```http://{ec2-publicip}:3000/graphql``` to use GraphQL Playground
+
+- **[GET ALL TICKETS]** 
+```
+{
+  tickets(limit: 10, page: 1){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+
+- **[FIND ONE]** 
+```
+{
+  ticket(id: "ea618b6b-74ed-478b-a1e8-403d1747b85f"){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+
+- **[FILTER BY CATEGORY]** 
+```
+{
+  filterByCategory(categoryName: "change"){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+
+- **[FILTER BY TITLE]** 
+```
+{
+  filterByTitle(titleParam: "printer"){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+
+- **[GET CLOSED TICKETS]** 
+```
+{
+  closedTickets(){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+
+- **[GET OPEN TICKETS]** 
+```
+{
+  openTickets(){
+    id
+    ticketNumber
+    title
+    issue
+    category
+    orderDetail
+    isClosed
+    createdAt
+    modifiedAt
+    imageProductUrl
+  }
+}
+```
+---

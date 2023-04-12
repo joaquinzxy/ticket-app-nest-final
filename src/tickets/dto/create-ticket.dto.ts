@@ -11,7 +11,11 @@ export class CreateTicketDto {
   @IsString()
   issue: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    enum: [ValidCategories.change,
+    ValidCategories.problem,
+    ValidCategories.service,]
+  })
   @IsString()
   @IsIn([
     ValidCategories.change,

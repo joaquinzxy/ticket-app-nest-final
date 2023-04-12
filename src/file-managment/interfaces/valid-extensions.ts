@@ -5,5 +5,8 @@ export const ValidFilesExtensions = {
     },
     imageFile: {
         format: ['jpg', 'jpeg', 'png', 'gif']
+    },
+    pdfFile: {
+        format: ['pdf']
     }
 }
