@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PaginationDto } from 'src/tickets/dto';
 import { TicketsService } from 'src/tickets/tickets.service';
 
 @Injectable()
@@ -8,8 +9,8 @@ export class TicketsGraphService {
 
   }
 
-  findAll(limit: number, page: number) {
-    return this.ticketsService.findAll({ limit, page });
+  findAll(paginationDto: PaginationDto) {
+    return this.ticketsService.findAll(paginationDto, null);
   }
 
   findOneByParam(id: string) {

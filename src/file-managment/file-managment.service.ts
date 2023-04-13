@@ -44,7 +44,8 @@ export class FileManagmentService {
       Bucket: this.configService.get('AWS_BUCKET_NAME'),
       Body: imageFile.buffer,
       Key: this.generateImageKey(ticketID),
-      ContentType: imageFile.mimetype
+      ContentType: imageFile.mimetype,
+      ACL: 'public-read'
     }
 
     const uploadResponse = await s3.upload(uploadParams, (err: any, _data: any) => {

@@ -13,7 +13,7 @@ export class TicketsGraphResolver {
     @Args('limit', { type: () => Number, defaultValue: 0 }, ParseIntPipe) limit: number,
     @Args('page', { type: () => Number, defaultValue: 0 }, ParseIntPipe) page: number
   ) {
-    return this.ticketsGraphService.findAll(limit, page);
+    return this.ticketsGraphService.findAll({ limit, page });
   }
 
   @Query(() => Ticket, { name: 'ticket' })

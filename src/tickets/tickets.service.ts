@@ -15,6 +15,8 @@ import { ValidCategories } from './interfaces/valid-categories';
 import { FileManagmentService } from 'src/file-managment/file-managment.service';
 import { PaginationDto } from './dto/pagination-dto';
 import { v4 as uuid } from 'uuid';
+import { ValidStatus } from './interfaces/valid-status';
+import { FilterQueryDto } from './dto/filter-query.dto';
 
 @Injectable()
 export class TicketsService {
@@ -22,7 +24,7 @@ export class TicketsService {
     @InjectRepository(Ticket)
     private readonly ticketRepository: Repository<Ticket>,
     private readonly fileManagmentService: FileManagmentService
-  ) {}
+  ) { }
 
   async create(
     createTicketDto: CreateTicketDto,
@@ -51,15 +53,28 @@ export class TicketsService {
     return newTicket;
   }
 
-  async findAll(paginationDto: PaginationDto) {
-    const { page = 0, limit = 0 } = paginationDto;
+  async findAll(filterQueryDto: FilterQueryDto, user: User) {
+    const {
+      textParam = '',
+      isClosed,
+      category,
+      page = 0,
+      limit = 0,
+    } = filterQueryDto;
+
+    const queryParams = {
+      title: Like(`%${textParam}%`),
+      category: category === 'all' ? undefined : ValidCategories[category],
+      isClosed: isClosed === 'all' ? undefined : ValidStatus[isClosed],
+      isDeleted: false,
+    };
 
     const offset = page * limit;
 
-    const total = await this.ticketRepository.count();
+    const total = await this.ticketRepository.countBy(queryParams);
 
     const tickets = await this.ticketRepository.find({
-      where: { isDeleted: false },
+      where: queryParams,
       take: limit,
       skip: offset,
       order: {

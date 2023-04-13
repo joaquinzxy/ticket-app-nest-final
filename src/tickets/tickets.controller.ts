@@ -9,6 +9,7 @@ import { ValidRoles } from 'src/auth/interfaces';
 import { validFilterParams } from './interfaces/valid-params-filter';
 import { CreateTicketDto, PaginationDto, UpdateTicketDto } from './dto';
 import { ValidStatus } from './interfaces/valid-status';
+import { FilterQueryDto } from './dto/filter-query.dto';
 
 @ApiTags('Tickets')
 @ApiBearerAuth()
@@ -36,9 +37,9 @@ export class TicketsController {
   @Get()
   @Auth()
   findAll(
-    @Query() paginationDto: PaginationDto
+    @Query() filterQueryDto: FilterQueryDto
   ) {
-    return this.ticketsService.findAll(paginationDto);
+    return this.ticketsService.findAll(filterQueryDto, null);
   }
 
   @Get('/category/:category')
