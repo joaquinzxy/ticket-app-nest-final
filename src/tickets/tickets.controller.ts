@@ -37,9 +37,10 @@ export class TicketsController {
   @Get()
   @Auth()
   findAll(
-    @Query() filterQueryDto: FilterQueryDto
+    @Query() filterQueryDto: FilterQueryDto,
+    @GetUser() user: User
   ) {
-    return this.ticketsService.findAll(filterQueryDto, null);
+    return this.ticketsService.findAll(filterQueryDto, user);
   }
 
   @Get('/category/:category')

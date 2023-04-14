@@ -6,6 +6,7 @@ import { FileManagmentService } from 'src/file-managment/file-managment.service'
 import { Ticket } from 'src/tickets/entities/ticket.entity';
 import { TicketsService } from 'src/tickets/tickets.service';
 import { Repository } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 import { initialData } from './data/initial-data';
 
 @Injectable()
@@ -78,11 +79,14 @@ export class SeedService {
       const user = users[Math.floor(Math.random() * users.length)]
 
       const ticketBeforeInsert = this.ticketsRepository.create({
+        id: uuid(),
         ...ticket,
         orderDetail: csvFileContent,
         imageProductUrl: imageUrlS3,
         user
       })
+
+      console.log(ticketBeforeInsert);
 
       const ticketDB = this.ticketsRepository.save(ticketBeforeInsert)
 

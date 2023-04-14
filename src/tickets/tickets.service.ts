@@ -54,6 +54,10 @@ export class TicketsService {
   }
 
   async findAll(filterQueryDto: FilterQueryDto, user: User) {
+
+    console.log(user);
+
+
     const {
       textParam = '',
       isClosed,
@@ -62,10 +66,18 @@ export class TicketsService {
       limit = 0,
     } = filterQueryDto;
 
+    const userEmail = user.roles.includes('admin') ? undefined : user.email
+
+    const totalPosta = await this.ticketRepository.count()
+
+    console.log(totalPosta);
+
+
     const queryParams = {
       title: Like(`%${textParam}%`),
       category: category === 'all' ? undefined : ValidCategories[category],
       isClosed: isClosed === 'all' ? undefined : ValidStatus[isClosed],
+      user: { email: userEmail },
       isDeleted: false,
     };
 
